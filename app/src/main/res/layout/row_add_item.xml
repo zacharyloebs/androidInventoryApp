@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/editTextTextItem"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="@string/item"
+        android:inputType="textPersonName"
+        android:autofillHints="" />
+
+    <EditText
+        android:id="@+id/editTextTextQuantity"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="@string/quantity"
+        android:inputType="textPersonName"
+        android:autofillHints="" />
+
+    <ImageView
+        android:id="@+id/image_close"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="10dp"
+        android:contentDescription="@string/delete_row"
+        android:src="@drawable/ic_close" />
+</LinearLayout>
