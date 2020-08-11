@@ -74,7 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean checkUser(String user, String pass) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String sql = "Select * from " + TABLE_USERS + " where " + COL_USERNAME + " = " + "'" + user + '\'';
+        String sql = "Select * from " + TABLE_USERS + " where " + COL_USERNAME + " = " + "'" + user + '\'' + " and " + COL_PASSWORD + " = " + "'" + pass + '\'';
         Cursor cursor = db.rawQuery(sql, null);
 
         if (cursor.moveToFirst()) {
@@ -83,6 +83,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else {
             cursor.close();
             return false;
+        }
+    }
+
+    public boolean createItem(String item, String quantity) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_ITEM, item);
+        contentValues.put(COL_QUANTITY, quantity);
+
+        long result = db.insert(TABLE_INVENTORY, null,contentValues);
+
+        if(result == -1) {
+            return false;
+        } else {
+            return true;
         }
     }
 }

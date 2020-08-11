@@ -2,7 +2,10 @@ package com.example.projecttwo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +15,7 @@ import android.widget.Toast;
 
 public class MainActivity2 extends AppCompatActivity implements View.OnClickListener {
 
+    DatabaseHelper db;
     private Button buttonAdd;
     private LinearLayout layoutList;
     private EditText editItem;
@@ -19,14 +23,18 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
     private ImageView imageClose;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
         layoutList = findViewById(R.id.layout_list);
         buttonAdd = findViewById(R.id.button_add);
-
         buttonAdd.setOnClickListener(this);
+
+        addView();
+
+        editItem = findViewById(R.id.editTextTextItem);
+
     }
 
     public void onClick(View view) {
@@ -40,6 +48,31 @@ public class MainActivity2 extends AppCompatActivity implements View.OnClickList
         editItem = inventoryView.findViewById(R.id.editTextTextItem);
         editQuantity = inventoryView.findViewById(R.id.editTextTextQuantity);
         imageClose = inventoryView.findViewById(R.id.image_close);
+
+        editItem.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                boolean check = db.createItem(editItem.getText().toString().trim(), editQuantity.getText().toString().trim());
+                if (check == true) {
+                    Toast.makeText(getApplicationContext(), "Successfully Added Item", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Item Already Exists",Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         imageClose.setOnClickListener(new View.OnClickListener() {
             @Override

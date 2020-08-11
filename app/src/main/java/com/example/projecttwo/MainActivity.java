@@ -31,12 +31,12 @@ public class MainActivity extends AppCompatActivity {
                     //Check database
                     boolean check = db.checkUser(username.getText().toString().trim(), password.getText().toString().trim());
                     if (check == true) {
-                        Toast.makeText(getApplicationContext(), "Succesful Login", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Successful Login", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, MainActivity2.class);
                         startActivity(intent);
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "Account Does Not Exist",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Incorrect Username Or Password",Toast.LENGTH_SHORT).show();
                     }
 
                 }
