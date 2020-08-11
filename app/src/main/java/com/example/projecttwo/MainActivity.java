@@ -6,30 +6,82 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button button;
+    DatabaseHelper db;
+    private Button buttonLogin, buttonCreateAccount;
+    private EditText username, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        button = (Button) findViewById(R.id.loginButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        db = new DatabaseHelper(this);
 
+        setupUIViews();
+
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openActivity2();
+                if (validate()) {
+                    //Check database
+                    boolean check = db.checkUser(username.getText().toString().trim(), password.getText().toString().trim());
+                    if (check == false) {
+                        Toast.makeText(getApplicationContext(), "Succesful Login", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Account Does Not Exist",Toast.LENGTH_SHORT).show();
+                    }
+
+                }
             }
         });
+
+        buttonCreateAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (validate()) {
+                    // Save data to database
+                    boolean insert = db.createUsers(username.getText().toString().trim(), password.getText().toString().trim());
+                    if (insert == true) {
+                        Toast.makeText(getApplicationContext(), "Successfully Created Account",Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Username Already Exists",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
     }
 
-    // Click "Login" button to start next activity
-    public void openActivity2() {
-        Intent intent = new Intent(this, MainActivity2.class);
-        startActivity(intent);
+    private void setupUIViews() {
+        username = (EditText)findViewById(R.id.editTextTextUserName);
+        password = (EditText)findViewById(R.id.editTextTextPassword);
+        buttonLogin = (Button)findViewById(R.id.loginButton);
+        buttonCreateAccount = (Button)findViewById(R.id.createAccountButton);
+    }
+
+    private Boolean validate() {
+        Boolean result = false;
+
+        String name = username.getText().toString();
+        String pass = password.getText().toString();
+
+        if(name.isEmpty() && pass.isEmpty()) {
+            Toast.makeText(this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
+        }else{
+            result = true;
+        }
+        return result;
     }
 }
