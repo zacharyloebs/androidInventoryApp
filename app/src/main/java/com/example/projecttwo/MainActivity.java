@@ -1,15 +1,13 @@
 package com.example.projecttwo;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 if (validate()) {
                     //Check database
                     boolean check = db.checkUser(username.getText().toString().trim(), password.getText().toString().trim());
-                    if (check == false) {
+                    if (check == true) {
                         Toast.makeText(getApplicationContext(), "Succesful Login", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, MainActivity2.class);
                         startActivity(intent);
@@ -65,14 +63,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupUIViews() {
-        username = (EditText)findViewById(R.id.editTextTextUserName);
-        password = (EditText)findViewById(R.id.editTextTextPassword);
-        buttonLogin = (Button)findViewById(R.id.loginButton);
-        buttonCreateAccount = (Button)findViewById(R.id.createAccountButton);
+        username = findViewById(R.id.editTextTextUserName);
+        password = findViewById(R.id.editTextTextPassword);
+        buttonLogin = findViewById(R.id.loginButton);
+        buttonCreateAccount = findViewById(R.id.createAccountButton);
     }
 
     private Boolean validate() {
-        Boolean result = false;
+        boolean result = false;
 
         String name = username.getText().toString();
         String pass = password.getText().toString();

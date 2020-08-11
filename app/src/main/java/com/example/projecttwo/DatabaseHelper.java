@@ -72,4 +72,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public boolean checkUser(String user, String pass) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String sql = "Select * from " + TABLE_USERS + " where " + COL_USERNAME + " = " + "'" + user + '\'';
+        Cursor cursor = db.rawQuery(sql, null);
+
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            return true;
+        } else {
+            cursor.close();
+            return false;
+        }
+    }
 }
