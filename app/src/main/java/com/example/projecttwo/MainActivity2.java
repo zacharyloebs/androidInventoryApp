@@ -11,7 +11,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
 import java.util.regex.Pattern;
+
+import Adapter.MyAdapter;
+import Model.Items;
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -20,7 +24,8 @@ public class MainActivity2 extends AppCompatActivity {
     private ListView listView;
     private EditText editItem, editQuantity;
     private ImageView imageClose;
-    int quantity;
+    ArrayList<Items> arrayList;
+    MyAdapter myAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,15 +35,19 @@ public class MainActivity2 extends AppCompatActivity {
         buttonAdd = findViewById(R.id.buttonAdd);
         editItem = findViewById(R.id.editTextTextItem);
         editQuantity = findViewById(R.id.editTextTextQuantity);
+        listView = findViewById(R.id.listView);
+        arrayList = new ArrayList<>();
 
         db = new DatabaseHelper(this);
+
+        loadDataInListView();
 
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (validate()) {
                     // Save data to database
-                    boolean insert = db.createUsers(editItem.getText().toString().trim(), editQuantity.getText().toString().trim());
+                    boolean insert = db.createItem(editItem.getText().toString().trim(), editQuantity.getText().toString().trim());
                     if (insert == true) {
                         Toast.makeText(getApplicationContext(), "Successfully Added Item",Toast.LENGTH_SHORT).show();
                     } else {
@@ -48,6 +57,15 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
     }
+
+    private void loadDataInListView() {
+
+        arrayList = db.getAllData();
+        myAdapter = new MyAdapter(this,arrayList);
+        listView.setAdapter(myAdapter);
+        myAdapter.notifyDataSetChanged();
+    }
+
     private Boolean validate() {
         boolean result = false;
 
@@ -63,7 +81,7 @@ public class MainActivity2 extends AppCompatActivity {
 
         }
         else if (isNumber == false) {
-            Toast.makeText(this, "Enter A Valid Number", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Enter A Number", Toast.LENGTH_SHORT).show();
 
         } else {
             result = true;

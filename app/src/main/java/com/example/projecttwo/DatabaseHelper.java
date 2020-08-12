@@ -7,7 +7,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
 import java.util.Collection;
+
+import Model.Items;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -65,7 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert(TABLE_USERS, null,contentValues);
 
-        if(result == -1) {
+        if (result == -1) {
             return false;
         } else {
             return true;
@@ -99,5 +102,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else {
             return true;
         }
+    }
+
+    public ArrayList<Items> getAllData() {
+
+        ArrayList<Items> arrayList = new ArrayList<>();
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM inventory", null);
+
+        while (cursor.moveToNext()) {
+
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            String age = cursor.getString(2);
+            Items items = new Items(name, age);
+
+            arrayList.add(items);
+        }
+
+        return arrayList;
     }
 }
