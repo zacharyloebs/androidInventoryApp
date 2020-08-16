@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +23,7 @@ public class MainActivity2 extends AppCompatActivity {
     private Button buttonAdd;
     private ListView listView;
     private EditText editItem, editQuantity;
-    private ImageView imageClose;
+    private TextView textItem, textQuantity;
     ArrayList<Items> arrayList;
     MyAdapter myAdapter;
 
@@ -37,6 +37,8 @@ public class MainActivity2 extends AppCompatActivity {
         editQuantity = findViewById(R.id.editTextTextQuantity);
         listView = findViewById(R.id.listView);
         arrayList = new ArrayList<>();
+        textItem = findViewById(R.id.id_txt);
+        textQuantity = findViewById(R.id.name_txt);
 
         db = new DatabaseHelper(this);
 
@@ -50,8 +52,12 @@ public class MainActivity2 extends AppCompatActivity {
                     boolean insert = db.createItem(editItem.getText().toString().trim(), editQuantity.getText().toString().trim());
                     if (insert == true) {
                         Toast.makeText(getApplicationContext(), "Successfully Added Item",Toast.LENGTH_SHORT).show();
+                        editItem.getText().clear();
+                        editQuantity.getText().clear();
                     } else {
                         Toast.makeText(getApplicationContext(), "Item Already Exists",Toast.LENGTH_SHORT).show();
+                        editItem.getText().clear();
+                        editQuantity.getText().clear();
                     }
                 }
             }
@@ -87,5 +93,10 @@ public class MainActivity2 extends AppCompatActivity {
             result = true;
         }
         return result;
+    }
+
+    public void onClick(View v) {
+        Intent intent = new Intent(this, MainActivity3.class);
+        startActivity(intent);
     }
 }

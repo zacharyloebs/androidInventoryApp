@@ -9,11 +9,12 @@
     <string name="inventory_list">Inventory List</string>
     <string name="add_item">Add Item</string>
     <string name="delete_row">Delete row</string>
-    <string name="save">save</string>
     <string name="sms_notifications">SMS Notifications</string>
     <string name="item">Item</string>
     <string name="_0">0</string>
-    <string name="okay">OKAY</string>
     <string name="zac">Zac</string>
     <string name="_01">01</string>
+    <string name="edit_quantity">edit quantity</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
 </resources>

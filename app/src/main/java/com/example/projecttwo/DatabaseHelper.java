@@ -1,6 +1,5 @@
 package com.example.projecttwo;
 
-import android.app.DownloadManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import Model.Items;
 
@@ -27,7 +25,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Table for items and quantity
     public static final String TABLE_INVENTORY = "inventory";
     // Columns for table
-    public static final String COL_ID_INVENTORY = "id";
     public static final String COL_ITEM = "item";
     public static final String COL_QUANTITY = "quantity";
 
@@ -39,7 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Create inventory table
     private static final String CREATE_TABLE_INVENTORY = "CREATE TABLE "
-            + TABLE_INVENTORY + " (" + COL_ID_INVENTORY + " INTEGER PRIMARY KEY, "
+            + TABLE_INVENTORY + " (" + COL_ID_USERS + " INTEGER PRIMARY KEY, "
             + COL_ITEM + " TEXT unique,"
             + COL_QUANTITY + " TEXT" + ") ";
 

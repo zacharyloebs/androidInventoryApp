@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.projecttwo.R;
@@ -39,14 +38,13 @@ public class MyAdapter extends BaseAdapter {
 
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.mycustomlistview,null);
-            TextView t1_id = (TextView)convertView.findViewById(R.id.id_txt);
-            TextView t2_name = (TextView)convertView.findViewById(R.id.name_txt);
-            TextView t3_age = (TextView)convertView.findViewById(R.id.age_txt);
+            TextView t1_item = convertView.findViewById(R.id.id_txt);
+            TextView t2_quantity = convertView.findViewById(R.id.name_txt);
 
             Items items = arrayList.get(position);
 
-            t1_id.setText(items.getItems());
-            t2_name.setText(items.getQuantity());
+            t1_item.setText(items.getItems());
+            t2_quantity.setText(items.getQuantity());
 
             return convertView;
     }
