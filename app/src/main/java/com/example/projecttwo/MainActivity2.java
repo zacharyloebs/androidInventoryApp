@@ -3,6 +3,7 @@ package com.example.projecttwo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -20,10 +21,10 @@ import Model.Items;
 public class MainActivity2 extends AppCompatActivity {
 
     DatabaseHelper db;
-    private Button buttonAdd;
+    private Button buttonAdd, buttonSave, buttonX;
     private ListView listView;
-    private EditText editItem, editQuantity;
-    private TextView textItem, textQuantity;
+    private EditText editItem, setQuantity, editQuantity;
+    public TextView textItem, textQuantity;
     ArrayList<Items> arrayList;
     MyAdapter myAdapter;
 
@@ -33,12 +34,16 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
 
         buttonAdd = findViewById(R.id.buttonAdd);
+        buttonSave = findViewById(R.id.buttonSave);
+        buttonX = findViewById(R.id.buttonX);
+
         editItem = findViewById(R.id.editTextTextItem);
-        editQuantity = findViewById(R.id.editTextTextQuantity);
+        setQuantity = findViewById(R.id.editTextTextQuantity);
+        editQuantity = findViewById(R.id.quantity_txt);
+
         listView = findViewById(R.id.listView);
         arrayList = new ArrayList<>();
-        textItem = findViewById(R.id.id_txt);
-        textQuantity = findViewById(R.id.name_txt);
+        textItem = findViewById(R.id.item_txt);
 
         db = new DatabaseHelper(this);
 
@@ -49,19 +54,22 @@ public class MainActivity2 extends AppCompatActivity {
             public void onClick(View view) {
                 if (validate()) {
                     // Save data to database
-                    boolean insert = db.createItem(editItem.getText().toString().trim(), editQuantity.getText().toString().trim());
+                    boolean insert = db.createItem(editItem.getText().toString().trim(), setQuantity.getText().toString().trim());
                     if (insert == true) {
                         Toast.makeText(getApplicationContext(), "Successfully Added Item",Toast.LENGTH_SHORT).show();
                         editItem.getText().clear();
-                        editQuantity.getText().clear();
+                        setQuantity.getText().clear();
                     } else {
                         Toast.makeText(getApplicationContext(), "Item Already Exists",Toast.LENGTH_SHORT).show();
                         editItem.getText().clear();
-                        editQuantity.getText().clear();
+                        setQuantity.getText().clear();
                     }
                 }
             }
         });
+
+
+
     }
 
     private void loadDataInListView() {
@@ -76,7 +84,7 @@ public class MainActivity2 extends AppCompatActivity {
         boolean result = false;
 
         String item = editItem.getText().toString().trim();
-        String quantity = editQuantity.getText().toString().trim();
+        String quantity = setQuantity.getText().toString().trim();
         boolean isNumber = Pattern.matches("[0-9]+", quantity);
 
         if (item.isEmpty() && quantity.isEmpty()) {
@@ -95,8 +103,4 @@ public class MainActivity2 extends AppCompatActivity {
         return result;
     }
 
-    public void onClick(View v) {
-        Intent intent = new Intent(this, MainActivity3.class);
-        startActivity(intent);
-    }
 }

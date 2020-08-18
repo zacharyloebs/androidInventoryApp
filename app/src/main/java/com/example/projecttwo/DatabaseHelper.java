@@ -101,6 +101,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void updateItem(String item, String quantity) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.execSQL("UPDATE " + TABLE_INVENTORY +  " SET " + COL_QUANTITY + " = " + "'" + quantity + '\'' + " WHERE " + COL_ITEM +  " = " + "'" + item + '\'');
+    }
+
     public ArrayList<Items> getAllData() {
 
         ArrayList<Items> arrayList = new ArrayList<>();

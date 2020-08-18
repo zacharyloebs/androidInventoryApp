@@ -5,7 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.projecttwo.R;
 
@@ -17,6 +20,7 @@ public class MyAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<Items> arrayList;
+
 
     public MyAdapter(Context context, ArrayList<Items> arrayList) {
         this.context = context;
@@ -36,17 +40,37 @@ public class MyAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.mycustomlistview,null);
-            TextView t1_item = convertView.findViewById(R.id.id_txt);
-            TextView t2_quantity = convertView.findViewById(R.id.name_txt);
+        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        convertView = inflater.inflate(R.layout.mycustomlistview,null);
+        final TextView t1_item = convertView.findViewById(R.id.item_txt);
+        final EditText t2_quantity = convertView.findViewById(R.id.quantity_txt);
+        Button buttonSave = convertView.findViewById(R.id.buttonSave);
+        Button buttonX = convertView.findViewById(R.id.buttonX);
 
-            Items items = arrayList.get(position);
+        Items items = arrayList.get(position);
 
-            t1_item.setText(items.getItems());
-            t2_quantity.setText(items.getQuantity());
+        t1_item.setText(items.getItems());
+        t2_quantity.setText(items.getQuantity());
 
-            return convertView;
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context.getApplicationContext(), "Cool" + t1_item.getText(),Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        buttonX.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context.getApplicationContext(), "Cool" + t2_quantity.getText(),Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        return convertView;
+
+
+
     }
 
     @Override
