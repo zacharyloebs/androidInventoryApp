@@ -8,11 +8,14 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationManagerCompat;
+
 import com.example.projecttwo.DatabaseHelper;
+import com.example.projecttwo.MainActivity2;
 import com.example.projecttwo.R;
 
 import java.util.ArrayList;
@@ -21,11 +24,14 @@ import Model.Items;
 
 public class MyAdapter extends BaseAdapter {
 
-    LinearLayout layoutList;
+    private LinearLayout layoutList;
     Context context;
     ArrayList<Items> arrayList;
     DatabaseHelper db;
-    private ListView listView;
+    private Switch notifications;
+    private NotificationManagerCompat notificationManager;
+    MainActivity2 main2;
+
 
     public MyAdapter(Context context, ArrayList<Items> arrayList) {
         this.context = context;
@@ -51,9 +57,11 @@ public class MyAdapter extends BaseAdapter {
         final EditText t2_quantity = convertView.findViewById(R.id.quantity_txt);
         Button buttonSave = convertView.findViewById(R.id.buttonSave);
         Button buttonX = convertView.findViewById(R.id.buttonX);
-        listView = convertView.findViewById(R.id.listView);
+        notifications = convertView.findViewById(R.id.smsSwitch);
+        notificationManager = NotificationManagerCompat.from(context);
 
         db = new DatabaseHelper(context);
+        main2 = new MainActivity2();
 
         layoutList = convertView.findViewById(R.id.linear);
 
@@ -65,16 +73,23 @@ public class MyAdapter extends BaseAdapter {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean update = db.updateItem(t1_item.getText().toString(), t2_quantity.getText().toString());
+                boolean update = false;
+                boolean checkIfEmpty = t2_quantity.getText().toString().trim().isEmpty();
+                String string = t2_quantity.getText().toString().trim();
+
+                if (!checkIfEmpty) {
+                    update = db.updateItem(t1_item.getText().toString(), t2_quantity.getText().toString());
+                }
+
                 if (update) {
                     Toast.makeText(context.getApplicationContext(), "Quantity of " + t1_item.getText() + " updated",Toast.LENGTH_SHORT).show();
-
                     arrayList = db.getAllData();
                     new MyAdapter(context, arrayList);
                     notifyDataSetChanged();
                 } else {
-                    Toast.makeText(context.getApplicationContext(), "Failed to update " + t1_item.getText() + " 's quantity",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), "Failed to update " + t1_item.getText() + " 's quantity. Please enter a number",Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
 

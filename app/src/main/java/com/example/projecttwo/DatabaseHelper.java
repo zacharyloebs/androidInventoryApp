@@ -66,11 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert(TABLE_USERS, null,contentValues);
 
-        if (result == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        return result != -1;
     }
 
     public boolean checkUser(String user, String pass) {
@@ -95,11 +91,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long result = db.insert(TABLE_INVENTORY, null,contentValues);
 
-        if(result == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        return result != -1;
     }
 
     public boolean updateItem(String item, String quantity) {
@@ -134,6 +126,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             arrayList.add(items);
         }
+        cursor.close();
 
         return arrayList;
     }

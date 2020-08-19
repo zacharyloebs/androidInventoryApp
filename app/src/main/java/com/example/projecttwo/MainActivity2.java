@@ -1,16 +1,19 @@
 package com.example.projecttwo;
 
-import android.content.Intent;
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -21,10 +24,13 @@ import Model.Items;
 public class MainActivity2 extends AppCompatActivity {
 
     DatabaseHelper db;
-    private Button buttonAdd, buttonSave, buttonX;
+    private NotificationManagerCompat notificationManager;
+    private Button buttonAdd;
     private ListView listView;
-    private EditText editItem, setQuantity, editQuantity;
-    public TextView textItem, textQuantity;
+    private EditText editItem, setQuantity;
+    private TextView textItem;
+    private Switch notifications;
+    boolean notificationsOn;
     ArrayList<Items> arrayList;
     MyAdapter myAdapter;
 
@@ -34,20 +40,31 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
 
         buttonAdd = findViewById(R.id.buttonAdd);
-        buttonSave = findViewById(R.id.buttonSave);
-        buttonX = findViewById(R.id.buttonX);
 
         editItem = findViewById(R.id.editTextTextItem);
         setQuantity = findViewById(R.id.editTextTextQuantity);
-        editQuantity = findViewById(R.id.quantity_txt);
 
         listView = findViewById(R.id.listView);
         arrayList = new ArrayList<>();
         textItem = findViewById(R.id.item_txt);
 
+        notifications = findViewById(R.id.smsSwitch);
+        notificationManager = NotificationManagerCompat.from(this);
+
         db = new DatabaseHelper(this);
 
         loadDataInListView();
+
+        notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    notificationsOn = true;
+                } else {
+                    notificationsOn = false;
+                }
+            }
+        });
 
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,9 +74,15 @@ public class MainActivity2 extends AppCompatActivity {
                     boolean insert = db.createItem(editItem.getText().toString().trim(), setQuantity.getText().toString().trim());
                     if (insert == true) {
                         Toast.makeText(getApplicationContext(), "Successfully Added Item",Toast.LENGTH_SHORT).show();
+
+                        if ((Integer.parseInt(setQuantity.getText().toString()) == 0 && notificationsOn == true)) {
+                            sendOnChannel1(view);
+                        }
+
                         editItem.getText().clear();
                         setQuantity.getText().clear();
                         loadDataInListView();
+
                     } else {
                         Toast.makeText(getApplicationContext(), "Item Already Exists",Toast.LENGTH_SHORT).show();
                         editItem.getText().clear();
@@ -68,6 +91,19 @@ public class MainActivity2 extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void sendOnChannel1(View v) {
+        android.app.Notification notification = new NotificationCompat.Builder(this, Notification.CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_one)
+                .setContentTitle("Title")
+                .setContentText("Content")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+
+        notificationManager.notify(1, notification);
+
     }
 
     public void loadDataInListView() {
@@ -100,6 +136,10 @@ public class MainActivity2 extends AppCompatActivity {
             result = true;
         }
         return result;
+    }
+
+    public boolean getNotificationCheck() {
+        return notificationsOn;
     }
 
 }
