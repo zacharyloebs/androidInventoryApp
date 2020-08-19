@@ -3,6 +3,7 @@ package com.example.projecttwo;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -101,10 +102,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void updateItem(String item, String quantity) {
+    public boolean updateItem(String item, String quantity) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        db.execSQL("UPDATE " + TABLE_INVENTORY +  " SET " + COL_QUANTITY + " = " + "'" + quantity + '\'' + " WHERE " + COL_ITEM +  " = " + "'" + item + '\'');
+        try {
+            db.execSQL("UPDATE " + TABLE_INVENTORY +  " SET " + COL_QUANTITY + " = " + "'" + quantity + '\'' + " WHERE " + COL_ITEM +  " = " + "'" + item + '\'');
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean deleteItem(String item) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        return db.delete(TABLE_INVENTORY, COL_ITEM + " = " + '"' + item  + '"', null) > 0;
     }
 
     public ArrayList<Items> getAllData() {

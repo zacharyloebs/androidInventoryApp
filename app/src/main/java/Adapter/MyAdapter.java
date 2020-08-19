@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.projecttwo.DatabaseHelper;
 import com.example.projecttwo.R;
 
 import java.util.ArrayList;
@@ -18,9 +21,11 @@ import Model.Items;
 
 public class MyAdapter extends BaseAdapter {
 
+    LinearLayout layoutList;
     Context context;
     ArrayList<Items> arrayList;
-
+    DatabaseHelper db;
+    private ListView listView;
 
     public MyAdapter(Context context, ArrayList<Items> arrayList) {
         this.context = context;
@@ -38,7 +43,7 @@ public class MyAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.mycustomlistview,null);
@@ -46,6 +51,11 @@ public class MyAdapter extends BaseAdapter {
         final EditText t2_quantity = convertView.findViewById(R.id.quantity_txt);
         Button buttonSave = convertView.findViewById(R.id.buttonSave);
         Button buttonX = convertView.findViewById(R.id.buttonX);
+        listView = convertView.findViewById(R.id.listView);
+
+        db = new DatabaseHelper(context);
+
+        layoutList = convertView.findViewById(R.id.linear);
 
         Items items = arrayList.get(position);
 
@@ -55,21 +65,34 @@ public class MyAdapter extends BaseAdapter {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context.getApplicationContext(), "Cool" + t1_item.getText(),Toast.LENGTH_SHORT).show();
+                boolean update = db.updateItem(t1_item.getText().toString(), t2_quantity.getText().toString());
+                if (update) {
+                    Toast.makeText(context.getApplicationContext(), "Quantity of " + t1_item.getText() + " updated",Toast.LENGTH_SHORT).show();
+
+                    arrayList = db.getAllData();
+                    new MyAdapter(context, arrayList);
+                    notifyDataSetChanged();
+                } else {
+                    Toast.makeText(context.getApplicationContext(), "Failed to update " + t1_item.getText() + " 's quantity",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         buttonX.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context.getApplicationContext(), "Cool" + t2_quantity.getText(),Toast.LENGTH_SHORT).show();
+                boolean delete = db.deleteItem(t1_item.getText().toString());
+                if (delete) {
+                    Toast.makeText(context.getApplicationContext(), "Item " + t1_item.getText() + " has been deleted",Toast.LENGTH_SHORT).show();
+                    arrayList.remove(position);
+                    notifyDataSetChanged();
+                } else {
+                    Toast.makeText(context.getApplicationContext(), "Could not delete " + t1_item.getText() + " has been deleted",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-
         return convertView;
-
-
 
     }
 

@@ -59,6 +59,7 @@ public class MainActivity2 extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Successfully Added Item",Toast.LENGTH_SHORT).show();
                         editItem.getText().clear();
                         setQuantity.getText().clear();
+                        loadDataInListView();
                     } else {
                         Toast.makeText(getApplicationContext(), "Item Already Exists",Toast.LENGTH_SHORT).show();
                         editItem.getText().clear();
@@ -67,17 +68,15 @@ public class MainActivity2 extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
 
-    private void loadDataInListView() {
+    public void loadDataInListView() {
 
         arrayList = db.getAllData();
         myAdapter = new MyAdapter(this,arrayList);
         listView.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
+
     }
 
     private Boolean validate() {
