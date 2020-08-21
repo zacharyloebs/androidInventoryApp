@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 if (validate()) {
                     //Check database
                     boolean check = db.checkUser(username.getText().toString().trim(), password.getText().toString().trim());
-                    if (check == true) {
+                    if (check) {
                         Toast.makeText(getApplicationContext(), "Successful Login", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, MainActivity2.class);
                         startActivity(intent);
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 if (validate()) {
                     // Save data to database
                     boolean insert = db.createUsers(username.getText().toString().trim(), password.getText().toString().trim());
-                    if (insert == true) {
+                    if (insert) {
                         Toast.makeText(getApplicationContext(), "Successfully Created Account",Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, MainActivity2.class);
                         startActivity(intent);

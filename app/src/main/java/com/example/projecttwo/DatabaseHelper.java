@@ -119,7 +119,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         while (cursor.moveToNext()) {
 
-            int id = cursor.getInt(0);
             String name = cursor.getString(1);
             String age = cursor.getString(2);
             Items items = new Items(name, age);

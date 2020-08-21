@@ -1,6 +1,5 @@
 package com.example.projecttwo;
 
-import android.app.NotificationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,7 +7,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +26,6 @@ public class MainActivity2 extends AppCompatActivity {
     private Button buttonAdd;
     private ListView listView;
     private EditText editItem, setQuantity;
-    private TextView textItem;
     private Switch notifications;
     boolean notificationsOn;
     ArrayList<Items> arrayList;
@@ -40,17 +37,12 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
 
         buttonAdd = findViewById(R.id.buttonAdd);
-
         editItem = findViewById(R.id.editTextTextItem);
         setQuantity = findViewById(R.id.editTextTextQuantity);
-
         listView = findViewById(R.id.listView);
         arrayList = new ArrayList<>();
-        textItem = findViewById(R.id.item_txt);
-
         notifications = findViewById(R.id.smsSwitch);
         notificationManager = NotificationManagerCompat.from(this);
-
         db = new DatabaseHelper(this);
 
         loadDataInListView();
@@ -58,11 +50,8 @@ public class MainActivity2 extends AppCompatActivity {
         notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    notificationsOn = true;
-                } else {
-                    notificationsOn = false;
-                }
+                notificationsOn = b;
+                loadDataInListView();
             }
         });
 
@@ -72,10 +61,10 @@ public class MainActivity2 extends AppCompatActivity {
                 if (validate()) {
                     // Save data to database
                     boolean insert = db.createItem(editItem.getText().toString().trim(), setQuantity.getText().toString().trim());
-                    if (insert == true) {
+                    if (insert) {
                         Toast.makeText(getApplicationContext(), "Successfully Added Item",Toast.LENGTH_SHORT).show();
 
-                        if ((Integer.parseInt(setQuantity.getText().toString()) == 0 && notificationsOn == true)) {
+                        if ((Integer.parseInt(setQuantity.getText().toString()) == 0 && notificationsOn)) {
                             sendOnChannel1(view);
                         }
 
@@ -96,8 +85,8 @@ public class MainActivity2 extends AppCompatActivity {
     public void sendOnChannel1(View v) {
         android.app.Notification notification = new NotificationCompat.Builder(this, Notification.CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.ic_one)
-                .setContentTitle("Title")
-                .setContentText("Content")
+                .setContentTitle("Item has reached zero")
+                .setContentText("Please order more: " + editItem.getText().toString().trim())
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                 .build();
@@ -109,7 +98,7 @@ public class MainActivity2 extends AppCompatActivity {
     public void loadDataInListView() {
 
         arrayList = db.getAllData();
-        myAdapter = new MyAdapter(this,arrayList);
+        myAdapter = new MyAdapter(this,arrayList, notificationsOn);
         listView.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
 
@@ -129,7 +118,7 @@ public class MainActivity2 extends AppCompatActivity {
             Toast.makeText(this, "Please Add An Item", Toast.LENGTH_SHORT).show();
 
         }
-        else if (isNumber == false) {
+        else if (!isNumber) {
             Toast.makeText(this, "Enter A Number", Toast.LENGTH_SHORT).show();
 
         } else {
@@ -137,9 +126,4 @@ public class MainActivity2 extends AppCompatActivity {
         }
         return result;
     }
-
-    public boolean getNotificationCheck() {
-        return notificationsOn;
-    }
-
 }

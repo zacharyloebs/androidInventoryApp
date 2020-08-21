@@ -12,10 +12,12 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.projecttwo.DatabaseHelper;
 import com.example.projecttwo.MainActivity2;
+import com.example.projecttwo.Notification;
 import com.example.projecttwo.R;
 
 import java.util.ArrayList;
@@ -28,14 +30,17 @@ public class MyAdapter extends BaseAdapter {
     Context context;
     ArrayList<Items> arrayList;
     DatabaseHelper db;
+    boolean onOrOff;
     private Switch notifications;
     private NotificationManagerCompat notificationManager;
+    TextView item;
     MainActivity2 main2;
 
 
-    public MyAdapter(Context context, ArrayList<Items> arrayList) {
+    public MyAdapter(Context context, ArrayList<Items> arrayList, boolean onOrOff) {
         this.context = context;
         this.arrayList = arrayList;
+        this.onOrOff = onOrOff;
     }
 
     @Override
@@ -53,8 +58,9 @@ public class MyAdapter extends BaseAdapter {
 
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.mycustomlistview,null);
-        final TextView t1_item = convertView.findViewById(R.id.item_txt);
+
         final EditText t2_quantity = convertView.findViewById(R.id.quantity_txt);
+        final TextView t1_item = convertView.findViewById(R.id.item_txt);
         Button buttonSave = convertView.findViewById(R.id.buttonSave);
         Button buttonX = convertView.findViewById(R.id.buttonX);
         notifications = convertView.findViewById(R.id.smsSwitch);
@@ -75,16 +81,20 @@ public class MyAdapter extends BaseAdapter {
             public void onClick(View view) {
                 boolean update = false;
                 boolean checkIfEmpty = t2_quantity.getText().toString().trim().isEmpty();
-                String string = t2_quantity.getText().toString().trim();
+                int checkForZero = Integer.parseInt(t2_quantity.getText().toString());
 
                 if (!checkIfEmpty) {
                     update = db.updateItem(t1_item.getText().toString(), t2_quantity.getText().toString());
+                    item = t1_item;
                 }
 
                 if (update) {
+                    if (checkForZero == 0 && onOrOff) {
+                        sendOnChannel1(view);
+                    }
                     Toast.makeText(context.getApplicationContext(), "Quantity of " + t1_item.getText() + " updated",Toast.LENGTH_SHORT).show();
                     arrayList = db.getAllData();
-                    new MyAdapter(context, arrayList);
+                    new MyAdapter(context, arrayList, onOrOff);
                     notifyDataSetChanged();
                 } else {
                     Toast.makeText(context.getApplicationContext(), "Failed to update " + t1_item.getText() + " 's quantity. Please enter a number",Toast.LENGTH_SHORT).show();
@@ -114,5 +124,18 @@ public class MyAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         return this.arrayList.size();
+    }
+
+    public void sendOnChannel1(View v) {
+        android.app.Notification notification = new NotificationCompat.Builder(context, Notification.CHANNEL_1_ID)
+                .setSmallIcon(R.drawable.ic_one)
+                .setContentTitle("Item has reached zero")
+                .setContentText("Please order more: " + item.getText().toString().trim())
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .build();
+
+        notificationManager.notify(1, notification);
+
     }
 }
