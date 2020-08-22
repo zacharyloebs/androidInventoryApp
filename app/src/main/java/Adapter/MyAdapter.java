@@ -16,7 +16,6 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.projecttwo.DatabaseHelper;
-import com.example.projecttwo.MainActivity2;
 import com.example.projecttwo.Notification;
 import com.example.projecttwo.R;
 
@@ -26,15 +25,14 @@ import Model.Items;
 
 public class MyAdapter extends BaseAdapter {
 
-    private LinearLayout layoutList;
     Context context;
     ArrayList<Items> arrayList;
     DatabaseHelper db;
     boolean onOrOff;
+    TextView item;
+    private LinearLayout layoutList;
     private Switch notifications;
     private NotificationManagerCompat notificationManager;
-    TextView item;
-    MainActivity2 main2;
 
 
     public MyAdapter(Context context, ArrayList<Items> arrayList, boolean onOrOff) {
@@ -56,8 +54,8 @@ public class MyAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = inflater.inflate(R.layout.mycustomlistview,null);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        convertView = inflater.inflate(R.layout.mycustomlistview, null);
 
         final EditText t2_quantity = convertView.findViewById(R.id.quantity_txt);
         final TextView t1_item = convertView.findViewById(R.id.item_txt);
@@ -67,7 +65,6 @@ public class MyAdapter extends BaseAdapter {
         notificationManager = NotificationManagerCompat.from(context);
 
         db = new DatabaseHelper(context);
-        main2 = new MainActivity2();
 
         layoutList = convertView.findViewById(R.id.linear);
 
@@ -92,12 +89,12 @@ public class MyAdapter extends BaseAdapter {
                     if (checkForZero == 0 && onOrOff) {
                         sendOnChannel1(view);
                     }
-                    Toast.makeText(context.getApplicationContext(), "Quantity of " + t1_item.getText() + " updated",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), "Quantity of " + t1_item.getText() + " updated", Toast.LENGTH_SHORT).show();
                     arrayList = db.getAllData();
                     new MyAdapter(context, arrayList, onOrOff);
                     notifyDataSetChanged();
                 } else {
-                    Toast.makeText(context.getApplicationContext(), "Failed to update " + t1_item.getText() + " 's quantity. Please enter a number",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), "Failed to update " + t1_item.getText() + " 's quantity. Please enter a number", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -108,11 +105,11 @@ public class MyAdapter extends BaseAdapter {
             public void onClick(View view) {
                 boolean delete = db.deleteItem(t1_item.getText().toString());
                 if (delete) {
-                    Toast.makeText(context.getApplicationContext(), "Item " + t1_item.getText() + " has been deleted",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), "Item " + t1_item.getText() + " has been deleted", Toast.LENGTH_SHORT).show();
                     arrayList.remove(position);
                     notifyDataSetChanged();
                 } else {
-                    Toast.makeText(context.getApplicationContext(), "Could not delete " + t1_item.getText() + " has been deleted",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), "Could not delete " + t1_item.getText() + " has been deleted", Toast.LENGTH_SHORT).show();
                 }
             }
         });

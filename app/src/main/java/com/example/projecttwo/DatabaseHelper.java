@@ -64,7 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_USERNAME, user);
         contentValues.put(COL_PASSWORD, password);
 
-        long result = db.insert(TABLE_USERS, null,contentValues);
+        long result = db.insert(TABLE_USERS, null, contentValues);
 
         return result != -1;
     }
@@ -89,7 +89,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COL_ITEM, item);
         contentValues.put(COL_QUANTITY, quantity);
 
-        long result = db.insert(TABLE_INVENTORY, null,contentValues);
+        long result = db.insert(TABLE_INVENTORY, null, contentValues);
 
         return result != -1;
     }
@@ -98,7 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         try {
-            db.execSQL("UPDATE " + TABLE_INVENTORY +  " SET " + COL_QUANTITY + " = " + "'" + quantity + '\'' + " WHERE " + COL_ITEM +  " = " + "'" + item + '\'');
+            db.execSQL("UPDATE " + TABLE_INVENTORY + " SET " + COL_QUANTITY + " = " + "'" + quantity + '\'' + " WHERE " + COL_ITEM + " = " + "'" + item + '\'');
         } catch (SQLException e) {
             return false;
         }
@@ -108,7 +108,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean deleteItem(String item) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        return db.delete(TABLE_INVENTORY, COL_ITEM + " = " + '"' + item  + '"', null) > 0;
+        return db.delete(TABLE_INVENTORY, COL_ITEM + " = " + '"' + item + '"', null) > 0;
     }
 
     public ArrayList<Items> getAllData() {

@@ -26,13 +26,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="@+id/editTextTextUserName"
         app:layout_constraintStart_toStartOf="@+id/editTextTextUserName"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextUserName"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextUserName" />
 
     <Button
         android:id="@+id/loginButton"

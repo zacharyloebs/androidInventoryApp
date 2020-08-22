@@ -22,14 +22,14 @@ import Model.Items;
 public class MainActivity2 extends AppCompatActivity {
 
     DatabaseHelper db;
+    boolean notificationsOn;
+    ArrayList<Items> arrayList;
+    MyAdapter myAdapter;
     private NotificationManagerCompat notificationManager;
     private Button buttonAdd;
     private ListView listView;
     private EditText editItem, setQuantity;
     private Switch notifications;
-    boolean notificationsOn;
-    ArrayList<Items> arrayList;
-    MyAdapter myAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class MainActivity2 extends AppCompatActivity {
                     // Save data to database
                     boolean insert = db.createItem(editItem.getText().toString().trim(), setQuantity.getText().toString().trim());
                     if (insert) {
-                        Toast.makeText(getApplicationContext(), "Successfully Added Item",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Successfully Added Item", Toast.LENGTH_SHORT).show();
 
                         if ((Integer.parseInt(setQuantity.getText().toString()) == 0 && notificationsOn)) {
                             sendOnChannel1(view);
@@ -73,7 +73,7 @@ public class MainActivity2 extends AppCompatActivity {
                         loadDataInListView();
 
                     } else {
-                        Toast.makeText(getApplicationContext(), "Item Already Exists",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Item Already Exists", Toast.LENGTH_SHORT).show();
                         editItem.getText().clear();
                         setQuantity.getText().clear();
                     }
@@ -98,7 +98,7 @@ public class MainActivity2 extends AppCompatActivity {
     public void loadDataInListView() {
 
         arrayList = db.getAllData();
-        myAdapter = new MyAdapter(this,arrayList, notificationsOn);
+        myAdapter = new MyAdapter(this, arrayList, notificationsOn);
         listView.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
 
@@ -113,12 +113,10 @@ public class MainActivity2 extends AppCompatActivity {
 
         if (item.isEmpty() && quantity.isEmpty()) {
             Toast.makeText(this, "Both Fields Are Empty", Toast.LENGTH_SHORT).show();
-        }
-        else if (item.isEmpty()) {
+        } else if (item.isEmpty()) {
             Toast.makeText(this, "Please Add An Item", Toast.LENGTH_SHORT).show();
 
-        }
-        else if (!isNumber) {
+        } else if (!isNumber) {
             Toast.makeText(this, "Enter A Number", Toast.LENGTH_SHORT).show();
 
         } else {

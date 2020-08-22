@@ -10,7 +10,8 @@ public class Items {
         this.quantity = quantity;
     }
 
-    public Items() {}
+    public Items() {
+    }
 
     public String getItems() {
         return items;

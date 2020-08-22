@@ -34,9 +34,8 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Successful Login", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, MainActivity2.class);
                         startActivity(intent);
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(), "Incorrect Username Or Password",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Incorrect Username Or Password", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -50,11 +49,11 @@ public class MainActivity extends AppCompatActivity {
                     // Save data to database
                     boolean insert = db.createUsers(username.getText().toString().trim(), password.getText().toString().trim());
                     if (insert) {
-                        Toast.makeText(getApplicationContext(), "Successfully Created Account",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Successfully Created Account", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, MainActivity2.class);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Username Already Exists",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Username Already Exists", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -75,9 +74,9 @@ public class MainActivity extends AppCompatActivity {
         String name = username.getText().toString();
         String pass = password.getText().toString();
 
-        if(name.isEmpty() && pass.isEmpty()) {
+        if (name.isEmpty() && pass.isEmpty()) {
             Toast.makeText(this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             result = true;
         }
         return result;
