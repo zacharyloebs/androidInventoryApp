@@ -26,27 +26,27 @@ public class MainActivity2 extends AppCompatActivity {
     ArrayList<Items> arrayList;
     MyAdapter myAdapter;
     private NotificationManagerCompat notificationManager;
-    private Button buttonAdd;
     private ListView listView;
     private EditText editItem, setQuantity;
-    private Switch notifications;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        buttonAdd = findViewById(R.id.buttonAdd);
+        Button buttonAdd = findViewById(R.id.buttonAdd);
+        final String userId = MainActivity.returnUserName();
         editItem = findViewById(R.id.editTextTextItem);
         setQuantity = findViewById(R.id.editTextTextQuantity);
         listView = findViewById(R.id.listView);
         arrayList = new ArrayList<>();
-        notifications = findViewById(R.id.smsSwitch);
+        Switch notifications = findViewById(R.id.smsSwitch);
         notificationManager = NotificationManagerCompat.from(this);
         db = new DatabaseHelper(this);
 
         loadDataInListView();
 
+        // Checks if SMS notifications button is on or off
         notifications.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -55,12 +55,13 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
 
+        // Add button listener
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (validate()) {
                     // Save data to database
-                    boolean insert = db.createItem(editItem.getText().toString().trim(), setQuantity.getText().toString().trim());
+                    boolean insert = db.createItem(userId, editItem.getText().toString().trim(), setQuantity.getText().toString().trim());
                     if (insert) {
                         Toast.makeText(getApplicationContext(), "Successfully Added Item", Toast.LENGTH_SHORT).show();
 
@@ -92,18 +93,16 @@ public class MainActivity2 extends AppCompatActivity {
                 .build();
 
         notificationManager.notify(1, notification);
-
     }
 
     public void loadDataInListView() {
-
         arrayList = db.getAllData();
         myAdapter = new MyAdapter(this, arrayList, notificationsOn);
         listView.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
-
     }
 
+    // Validation method to check if fields are empty
     private Boolean validate() {
         boolean result = false;
 

@@ -26,6 +26,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Table for items and quantity
     public static final String TABLE_INVENTORY = "inventory";
     // Columns for table
+    public static final String COL_ID_INVENTORY = "id";
+    public static final String COL_USERNAME_INV = "username";
     public static final String COL_ITEM = "item";
     public static final String COL_QUANTITY = "quantity";
 
@@ -37,7 +39,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //Create inventory table
     private static final String CREATE_TABLE_INVENTORY = "CREATE TABLE "
-            + TABLE_INVENTORY + " (" + COL_ID_USERS + " INTEGER PRIMARY KEY, "
+            + TABLE_INVENTORY + " (" + COL_ID_INVENTORY + " INTEGER PRIMARY KEY, "
+            + COL_USERNAME_INV + " TEXT,"
             + COL_ITEM + " TEXT unique,"
             + COL_QUANTITY + " TEXT" + ") ";
 
@@ -83,9 +86,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public boolean createItem(String item, String quantity) {
+    public boolean createItem(String username, String item, String quantity) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_USERNAME_INV, username);
         contentValues.put(COL_ITEM, item);
         contentValues.put(COL_QUANTITY, quantity);
 
@@ -111,17 +115,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.delete(TABLE_INVENTORY, COL_ITEM + " = " + '"' + item + '"', null) > 0;
     }
 
+    // Loads unique user data from data base into array
     public ArrayList<Items> getAllData() {
-
+        String user = MainActivity.returnUserName();
         ArrayList<Items> arrayList = new ArrayList<>();
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM inventory", null);
+        // SQLite query to return unique data for each user
+        Cursor cursor = db.rawQuery("SELECT * FROM inventory WHERE username =" + "'" + user + "'", null);
 
         while (cursor.moveToNext()) {
 
-            String name = cursor.getString(1);
-            String age = cursor.getString(2);
-            Items items = new Items(name, age);
+            String item = cursor.getString(2);
+            String quantity = cursor.getString(3);
+            Items items = new Items(item, quantity);
 
             arrayList.add(items);
         }

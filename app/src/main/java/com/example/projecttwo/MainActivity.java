@@ -13,7 +13,8 @@ public class MainActivity extends AppCompatActivity {
 
     DatabaseHelper db;
     private Button buttonLogin, buttonCreateAccount;
-    private EditText username, password;
+    private static EditText username;
+    private EditText password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Incorrect Username Or Password", Toast.LENGTH_SHORT).show();
                     }
-
                 }
             }
         });
@@ -84,5 +84,10 @@ public class MainActivity extends AppCompatActivity {
             result = true;
         }
         return result;
+    }
+
+    // Method to return username of current user
+    public static String returnUserName() {
+        return username.getText().toString().trim();
     }
 }
