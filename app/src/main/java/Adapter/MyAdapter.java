@@ -80,6 +80,7 @@ public class MyAdapter extends BaseAdapter {
                 boolean checkIfEmpty = t2_quantity.getText().toString().trim().isEmpty();
                 int checkForZero = Integer.parseInt(t2_quantity.getText().toString());
 
+                // Crashes app if saved when empty
                 if (!checkIfEmpty) {
                     update = db.updateItem(t1_item.getText().toString(), t2_quantity.getText().toString());
                     item = t1_item;

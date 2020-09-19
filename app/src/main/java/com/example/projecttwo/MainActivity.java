@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Allows user to create account with one field empty
         buttonCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private void setupUIViews() {
@@ -68,13 +68,14 @@ public class MainActivity extends AppCompatActivity {
         buttonCreateAccount = findViewById(R.id.createAccountButton);
     }
 
+    // Validation method to check if fields are empty
     private Boolean validate() {
         boolean result = false;
 
-        String name = username.getText().toString();
-        String pass = password.getText().toString();
+        String name = username.getText().toString().trim();
+        String pass = password.getText().toString().trim();
 
-        if (name.isEmpty() && pass.isEmpty()) {
+        if (name.isEmpty() || pass.isEmpty()) {
             Toast.makeText(this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
         } else {
             result = true;
