@@ -24,12 +24,14 @@ public class MainActivity extends AppCompatActivity {
 
         setupUIViews();
 
+        // Login button listener
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (validate()) {
                     //Check database
                     boolean check = db.checkUser(username.getText().toString().trim(), password.getText().toString().trim());
+                    // Start next intent if credentials are in database
                     if (check) {
                         Toast.makeText(getApplicationContext(), "Successful Login", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, MainActivity2.class);
@@ -42,13 +44,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Allows user to create account with one field empty
+        // Create Account button listener
         buttonCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (validate()) {
                     // Save data to database
                     boolean insert = db.createUsers(username.getText().toString().trim(), password.getText().toString().trim());
+                    // Start next intent if credentials are successfully added to database
                     if (insert) {
                         Toast.makeText(getApplicationContext(), "Successfully Created Account", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(MainActivity.this, MainActivity2.class);

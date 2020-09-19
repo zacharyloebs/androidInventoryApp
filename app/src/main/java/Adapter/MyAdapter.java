@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,9 +27,7 @@ public class MyAdapter extends BaseAdapter {
     ArrayList<Items> arrayList;
     DatabaseHelper db;
     boolean onOrOff;
-    TextView item;
-    private LinearLayout layoutList;
-    private Switch notifications;
+    private TextView item;
     private NotificationManagerCompat notificationManager;
 
 
@@ -61,12 +57,9 @@ public class MyAdapter extends BaseAdapter {
         final TextView t1_item = convertView.findViewById(R.id.item_txt);
         Button buttonSave = convertView.findViewById(R.id.buttonSave);
         Button buttonX = convertView.findViewById(R.id.buttonX);
-        notifications = convertView.findViewById(R.id.smsSwitch);
         notificationManager = NotificationManagerCompat.from(context);
 
         db = new DatabaseHelper(context);
-
-        layoutList = convertView.findViewById(R.id.linear);
 
         Items items = arrayList.get(position);
 
@@ -78,16 +71,17 @@ public class MyAdapter extends BaseAdapter {
             public void onClick(View view) {
                 boolean update = false;
                 boolean checkIfEmpty = t2_quantity.getText().toString().trim().isEmpty();
-                int checkForZero = Integer.parseInt(t2_quantity.getText().toString());
+                boolean checkIfZero = false;
 
-                // Crashes app if saved when empty
                 if (!checkIfEmpty) {
                     update = db.updateItem(t1_item.getText().toString(), t2_quantity.getText().toString());
                     item = t1_item;
+                    if (Integer.parseInt(t2_quantity.getText().toString().trim()) == 0) {
+                        checkIfZero = true;
+                    }
                 }
-
                 if (update) {
-                    if (checkForZero == 0 && onOrOff) {
+                    if (checkIfZero && onOrOff) {
                         sendOnChannel1(view);
                     }
                     Toast.makeText(context.getApplicationContext(), "Quantity of " + t1_item.getText() + " updated", Toast.LENGTH_SHORT).show();
@@ -95,9 +89,8 @@ public class MyAdapter extends BaseAdapter {
                     new MyAdapter(context, arrayList, onOrOff);
                     notifyDataSetChanged();
                 } else {
-                    Toast.makeText(context.getApplicationContext(), "Failed to update " + t1_item.getText() + " 's quantity. Please enter a number", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context.getApplicationContext(), "Please enter a number", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -134,6 +127,5 @@ public class MyAdapter extends BaseAdapter {
                 .build();
 
         notificationManager.notify(1, notification);
-
     }
 }
