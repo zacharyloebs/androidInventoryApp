@@ -72,6 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
+    // Check if user exists in database
     public boolean checkUser(String user, String pass) {
         SQLiteDatabase db = this.getWritableDatabase();
         String sql = "Select * from " + TABLE_USERS + " where " + COL_USERNAME + " = " + "'" + user + '\'' + " and " + COL_PASSWORD + " = " + "'" + pass + '\'';
@@ -86,6 +87,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    // Insert a new item into the database
     public boolean createItem(String username, String item, String quantity) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -98,6 +100,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
+    // update an item in the database
     public boolean updateItem(String item, String quantity) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -109,6 +112,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    // Delete and item in the database
     public boolean deleteItem(String item) {
         SQLiteDatabase db = this.getWritableDatabase();
 

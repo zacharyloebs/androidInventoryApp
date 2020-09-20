@@ -1,5 +1,6 @@
 package com.example.projecttwo;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     DatabaseHelper db;
     private Button buttonLogin, buttonCreateAccount;
+    @SuppressLint("StaticFieldLeak")
     private static EditText username;
     private EditText password;
 

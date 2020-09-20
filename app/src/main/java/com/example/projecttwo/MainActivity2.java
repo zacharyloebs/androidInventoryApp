@@ -83,6 +83,7 @@ public class MainActivity2 extends AppCompatActivity {
         });
     }
 
+    // Display SMS message
     public void sendOnChannel1(View v) {
         android.app.Notification notification = new NotificationCompat.Builder(this, Notification.CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.ic_one)

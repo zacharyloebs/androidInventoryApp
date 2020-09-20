@@ -1,9 +1,9 @@
+/* Model class that contains a constructor, getters and setters */
 package Model;
 
 public class Items {
 
     String items, quantity;
-
 
     public Items(String items, String quantity) {
         this.items = items;

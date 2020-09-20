@@ -66,6 +66,7 @@ public class MyAdapter extends BaseAdapter {
         t1_item.setText(items.getItems());
         t2_quantity.setText(items.getQuantity());
 
+        // Save button listener
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,14 +74,18 @@ public class MyAdapter extends BaseAdapter {
                 boolean checkIfEmpty = t2_quantity.getText().toString().trim().isEmpty();
                 boolean checkIfZero = false;
 
+                // Check if quantity field is empty
                 if (!checkIfEmpty) {
                     update = db.updateItem(t1_item.getText().toString(), t2_quantity.getText().toString());
                     item = t1_item;
+                    // Check if quantity is zero
                     if (Integer.parseInt(t2_quantity.getText().toString().trim()) == 0) {
                         checkIfZero = true;
                     }
                 }
+                // if update is successful display message and update list
                 if (update) {
+                    // Activate SMS notification if SMS switch is on and quantity is 0
                     if (checkIfZero && onOrOff) {
                         sendOnChannel1(view);
                     }
@@ -94,6 +99,7 @@ public class MyAdapter extends BaseAdapter {
             }
         });
 
+        // Listener for delete button
         buttonX.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,9 +113,7 @@ public class MyAdapter extends BaseAdapter {
                 }
             }
         });
-
         return convertView;
-
     }
 
     @Override
@@ -117,6 +121,7 @@ public class MyAdapter extends BaseAdapter {
         return this.arrayList.size();
     }
 
+    // Display SMS message
     public void sendOnChannel1(View v) {
         android.app.Notification notification = new NotificationCompat.Builder(context, Notification.CHANNEL_1_ID)
                 .setSmallIcon(R.drawable.ic_one)
