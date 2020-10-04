@@ -41,7 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_INVENTORY = "CREATE TABLE "
             + TABLE_INVENTORY + " (" + COL_ID_INVENTORY + " INTEGER PRIMARY KEY, "
             + COL_USERNAME_INV + " TEXT,"
-            + COL_ITEM + " TEXT unique,"
+            + COL_ITEM + " TEXT,"
             + COL_QUANTITY + " TEXT" + ") ";
 
     public DatabaseHelper(Context context) {
